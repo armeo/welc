@@ -25,9 +25,13 @@ public class Scheduler {
     public void addEvent(Event event) {
 		event.added();
 		events.add(event);
-		mailService.sendMail("jacques@spg1.com", "Event Notification", event.toString());
+		sendMail("jacques@spg1.com", "Event Notification", event.toString());
 		display.showEvent(event);
 	}
+
+    protected void sendMail(String address, String subject, String message) {
+        mailService.sendMail(address, subject, message);
+    }
 	
 	public boolean hasEvents(Date date) {
 		for(Iterator it = events.iterator(); it.hasNext();) {
