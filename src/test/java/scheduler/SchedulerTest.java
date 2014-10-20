@@ -31,6 +31,13 @@ public class SchedulerTest {
         scheduler.addEvent(new Meeting(now, DayTime.Time10AM, "meeting"));
         assertThat(scheduler.getMeeting(now, DayTime.Time10AM, new HolidayTimeService()), is(nullValue()));
     }
+
+    @Test
+    public void shouldNotReturnsMeetingWhenNeverAddEvent(){
+        Date now = new Date();
+        Scheduler scheduler = new TestingScheduler("Bill", new FakeDisplay());
+        assertThat(scheduler.getMeeting(now, DayTime.Time10AM, new HolidayTimeService()), is(nullValue()));
+    }
 }
 
 class FakeDisplay implements Display {
