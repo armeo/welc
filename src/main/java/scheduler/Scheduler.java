@@ -63,15 +63,19 @@ public class Scheduler {
 			meeting.appendToText(note);
 		}
 	}
-	
-	public Meeting getMeeting(Date date, int slot) {
+
+    public Meeting getMeeting(Date date, int slot) {
+        return getMeeting(date, slot, new TimeServices());
+    }
+
+	public Meeting getMeeting(Date date, int slot, TimeServices timeServices) {
 		for(Iterator it = events.iterator(); it.hasNext(); ) {
 			Event event = (Event)it.next();
 			if (!(event instanceof Meeting))
 				continue;
 			Meeting meeting = (Meeting)event;
 			if (meeting.getDate().equals(date) && meeting.getSlot() == slot
-				&& !TimeServices.isHoliday(meeting.getDate()))
+				&& !timeServices.isDateAHoliday(meeting.getDate()))
 				return meeting;
 				
 		}

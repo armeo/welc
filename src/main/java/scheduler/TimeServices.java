@@ -18,4 +18,8 @@ public class TimeServices {
 		// imagine this method has a real implementation
 		return false;
 	}
+
+    public boolean isDateAHoliday(Date date) {
+        return isHoliday(date);
+    }
 }
