@@ -1,18 +1,17 @@
 package scheduler;
 
 public class MailService {
-	private static MailService instance;
-	
+    private static MailService instance;
+
     private MailService() {
     }
-    
+
     public static MailService getInstance() {
-        if (instance == null)
-        	instance = new MailService();
+        if (instance == null) instance = new MailService();
         return instance;
     }
-    
-	public void sendMail(String address, String subject, String message) {
-		// this method really sends mail
-	}
+
+    public void sendMail(String address, String subject, String message) {
+        // this method really sends mail
+    }
 }
