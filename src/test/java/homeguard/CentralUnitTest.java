@@ -1,83 +1,32 @@
 package homeguard;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CentralUnitTest {
-    private CentralUnit centralUnit;
 
-    @Before
-    public void setUp(){
-        centralUnit = new CentralUnit();
+    public static void assertSensorMessage(String type, String nonTrippedMessage, String trippedMessage){
+        {
+            CentralUnit centralUnit = new CentralUnit();
+            Sensor sensor = new Sensor("1", "<X>", type);
+            assertThat(centralUnit.getSensorMessage(sensor), is(nonTrippedMessage));
+        }
+        {
+            CentralUnit centralUnit = new CentralUnit();
+            Sensor sensor = new Sensor("1", "<X>", type);
+            sensor.trip();
+            assertThat(centralUnit.getSensorMessage(sensor), is(trippedMessage));
+        }
     }
 
     @Test
-    public void shouldReturnLocationIsOpenWhenIsTrippedAndDoor(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.DOOR);
-        sensor.trip();
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is open"));
-    }
-
-    @Test
-    public void shouldReturnLocationIsAjarWhenIsTrippedAndWindow(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.WINDOW);
-        sensor.trip();
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is ajar"));
-    }
-
-    @Test
-    public void shouldReturnMotionDetectedInLocationWhenIsTrippedAndMotion(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.MOTION);
-        sensor.trip();
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Motion detected in Home"));
-    }
-
-    @Test
-    public void shouldReturnLocationInOnFireWhenIsTrippedAndFire(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.FIRE);
-        sensor.trip();
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is on FIRE!"));
-    }
-
-    @Test
-    public void shouldReturnLocationIsClosedWhenIsNotTrippedAndDoor(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.DOOR);
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is closed"));
-    }
-
-    @Test
-    public void shouldReturnLocationIsSealedWhenIsNotTrippedAndWindow(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.WINDOW);
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is sealed"));
-    }
-
-    @Test
-    public void shouldReturnLocationIsMotionlessWhenIsNotTrippedAndMotion(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.MOTION);
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home is motionless"));
-    }
-
-    @Test
-    public void shouldReturnLocationTemperatureInNormalWhenIsNotTrippedAndFire(){
-        Sensor sensor = new Sensor("0", "Home", Sensor.FIRE);
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("Home temperature is normal"));
-    }
-
-    @Test
-    public void shouldReturnDefaultMessageWhenSensorIsNotInitial(){
-        Sensor sensor = new Sensor("", "", "");
-
-        assertThat(centralUnit.getSensorMessage(sensor), is("default"));
+    public void testSensorMessages(){
+        assertSensorMessage(Sensor.DOOR, "<X> is closed", "<X> is open");
+        assertSensorMessage(Sensor.WINDOW, "<X> is sealed", "<X> is ajar");
+        assertSensorMessage(Sensor.MOTION, "<X> is motionless", "Motion detected in <X>");
+        assertSensorMessage(Sensor.FIRE, "<X> temperature is normal", "<X> is on FIRE!");
+        assertSensorMessage("", "default", "default");
     }
 }
