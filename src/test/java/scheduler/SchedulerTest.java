@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SchedulerTest {
@@ -16,11 +17,19 @@ public class SchedulerTest {
     }
 
     @Test
-    public void sholdReturnsMeetingWhenNotHoliday(){
+    public void shouldReturnsMeetingWhenNotHoliday(){
         Date now = new Date();
         Scheduler scheduler = new TestingScheduler("Bill", new FakeDisplay());
         scheduler.addEvent(new Meeting(now, DayTime.Time10AM, "meeting"));
-        assertThat(scheduler.getMeeting(now, DayTime.Time10AM, new FakeTimeService()).getText(), is("meeting"));
+        assertThat(scheduler.getMeeting(now, DayTime.Time10AM, new NotHolidayTimeService()).getText(), is("meeting"));
+    }
+
+    @Test
+    public void shouldNotReturnsMeetingWhenHoliday(){
+        Date now = new Date();
+        Scheduler scheduler = new TestingScheduler("Bill", new FakeDisplay());
+        scheduler.addEvent(new Meeting(now, DayTime.Time10AM, "meeting"));
+        assertThat(scheduler.getMeeting(now, DayTime.Time10AM, new HolidayTimeService()), is(nullValue()));
     }
 }
 
@@ -40,8 +49,14 @@ class TestingScheduler extends Scheduler{
     }
 }
 
-class FakeTimeService extends TimeServices{
+class NotHolidayTimeService extends TimeServices{
     public boolean isDateAHoliday(Date date) {
         return false;
+    }
+}
+
+class HolidayTimeService extends TimeServices{
+    public boolean isDateAHoliday(Date date) {
+        return true;
     }
 }
