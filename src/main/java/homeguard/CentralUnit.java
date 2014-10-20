@@ -7,10 +7,7 @@ import java.util.List;
 
 public class CentralUnit {
     // sensor test status options
-    public static final String PASS = "PASS";
-    public static final String FAIL = "FAIL";
-    public static final String PENDING = "pending";
-    public static final String READY = "ready";
+    SensorStatus sensorStatus = new SensorStatus();
 
     private boolean armed = false;
     private String securityCode;
@@ -100,14 +97,14 @@ public class CentralUnit {
     private void updateSensorTestStatus(String id, String status) {
         if (diagnostics.runningSensorTest) {
             if ("TRIPPED".equals(status)) {
-                diagnostics.sensorTestStatusMap.put(id, PASS);
+                diagnostics.sensorTestStatusMap.put(id, sensorStatus.PASS);
             }
 
             // check to see if test is complete
             boolean done = true;
             for (Iterator iterator = diagnostics.sensorTestStatusMap.values().iterator(); iterator.hasNext(); ) {
                 String testStatus = (String) iterator.next();
-                if (PENDING.equals(testStatus)) {
+                if (sensorStatus.PENDING.equals(testStatus)) {
                     done = false;
                     break;
                 }
@@ -120,13 +117,13 @@ public class CentralUnit {
 
     public void runSensorTest() {
         diagnostics.runningSensorTest = true;
-        diagnostics.sensorTestStatus = PENDING;
+        diagnostics.sensorTestStatus = sensorStatus.PENDING;
 
         // initialize the status map
         diagnostics.sensorTestStatusMap = new HashMap();
         for (Iterator iterator = sensors.iterator(); iterator.hasNext(); ) {
             Sensor sensor = (Sensor) iterator.next();
-            diagnostics.sensorTestStatusMap.put(sensor.getId(), PENDING);
+            diagnostics.sensorTestStatusMap.put(sensor.getId(), sensorStatus.PENDING);
         }
     }
 
@@ -135,11 +132,11 @@ public class CentralUnit {
         diagnostics.runningSensorTest = false;
 
         // look at individual sensor status to determine the overall test status
-        diagnostics.sensorTestStatus = PASS;
+        diagnostics.sensorTestStatus = sensorStatus.PASS;
         for (Iterator iterator = diagnostics.sensorTestStatusMap.values().iterator(); iterator.hasNext(); ) {
             String status = (String) iterator.next();
-            if (status.equals(PENDING)) {
-                diagnostics.sensorTestStatus = FAIL;
+            if (status.equals(sensorStatus.PENDING)) {
+                diagnostics.sensorTestStatus = sensorStatus.FAIL;
                 break;
             }
         }
