@@ -10,7 +10,11 @@ public class Scheduler {
 	private MailService mailService;
 	private Display display;
 	private List events = new ArrayList();
-	
+
+    public Scheduler(String owner){
+        this(owner, new SchedulerDisplay());
+    }
+
 	public Scheduler(String owner, Display display) {
 		this.owner = owner;
 		
