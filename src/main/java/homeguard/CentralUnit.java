@@ -88,15 +88,13 @@ public class CentralUnit {
     }
 
     private Sensor getSensorById(String id) {
-        Sensor sensor = null;
         for (Iterator iterator = sensors.iterator(); iterator.hasNext(); ) {
             Sensor s = (Sensor) iterator.next();
             if (s.getId().equals(id)) {
-                sensor = s;
-                break;
+                return s;
             }
         }
-        return sensor;
+        return null;
     }
 
     private void updateSensorTestStatus(String id, String status) {
@@ -105,19 +103,19 @@ public class CentralUnit {
                 diagnostics.sensorTestStatusMap.put(id, sensorStatus.PASS);
             }
 
-            // check to see if test is complete
-            boolean done = true;
-            for (Iterator iterator = diagnostics.sensorTestStatusMap.values().iterator(); iterator.hasNext(); ) {
-                String testStatus = (String) iterator.next();
-                if (sensorStatus.PENDING.equals(testStatus)) {
-                    done = false;
-                    break;
-                }
-            }
-
             //terminate test if complete
-            if (done) terminateSensorTest();
+            if (isSensorTestComplete()) terminateSensorTest();
         }
+    }
+
+    private boolean isSensorTestComplete() {
+        for (Iterator iterator = diagnostics.sensorTestStatusMap.values().iterator(); iterator.hasNext(); ) {
+            String testStatus = (String) iterator.next();
+            if (sensorStatus.PENDING.equals(testStatus)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void runSensorTest() {
