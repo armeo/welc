@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CentralUnit {
-    // sensor test status options
-    SensorStatus sensorStatus = new SensorStatus();
-
     private boolean armed = false;
     private String securityCode;
     private List sensors = new LinkedList();
     private HomeGuardView view = new TextView();
     private AudibleAlarm audibleAlarm = new TextAudibleAlarm();
+
+    // sensor test status options
+    SensorStatus sensorStatus = new SensorStatus();
 
     // members to help with sensor tests
     Diagnostics diagnostics = new Diagnostics();
@@ -71,20 +71,23 @@ public class CentralUnit {
         Sensor sensor = getSensorById(id);
 
         //trip or reset sensor
-        if (sensor != null) {
-            if ("TRIPPED".equals(status)) sensor.trip();
-            else sensor.reset();
-        }
+        tripOrResetSensor(status, sensor);
 
         //get the message from the sensor and display it
-        String message = getSensorMessage(sensor);
-        view.showMessage(message);
+        view.showMessage(getSensorMessage(sensor));
 
         // sound the alarm if armed
         if (isArmed()) audibleAlarm.sound();
 
         // check if a sensor test is running and adjust status
         updateSensorTestStatus(id, status);
+    }
+
+    private void tripOrResetSensor(String status, Sensor sensor) {
+        if (sensor != null) {
+            if ("TRIPPED".equals(status)) sensor.trip();
+            else sensor.reset();
+        }
     }
 
     private Sensor getSensorById(String id) {
@@ -135,14 +138,18 @@ public class CentralUnit {
         diagnostics.runningSensorTest = false;
 
         // look at individual sensor status to determine the overall test status
-        diagnostics.sensorTestStatus = sensorStatus.PASS;
+        diagnostics.sensorTestStatus = determinateSensorTestStatus();
+    }
+
+    private String determinateSensorTestStatus() {
         for (Iterator iterator = diagnostics.sensorTestStatusMap.values().iterator(); iterator.hasNext(); ) {
             String status = (String) iterator.next();
             if (status.equals(sensorStatus.PENDING)) {
-                diagnostics.sensorTestStatus = sensorStatus.FAIL;
-                break;
+                return sensorStatus.FAIL;
             }
         }
+
+        return sensorStatus.PASS;
     }
 
     public String getSensorMessage(Sensor sensor) {
