@@ -8,21 +8,21 @@ import java.util.List;
 public class Scheduler {
 	private String owner = "";
 	private MailService mailService;
-	private SchedulerDisplay display;
+	private Display display;
 	private List events = new ArrayList();
 	
-	public Scheduler(String owner) {
+	public Scheduler(String owner, Display display) {
 		this.owner = owner;
 		
 		mailService = MailService.getInstance();
-		display = new SchedulerDisplay();		
+		this.display = display;
 	}
-	
-	public void addEvent(Event event) {
+
+    public void addEvent(Event event) {
 		event.added();
 		events.add(event);
 		mailService.sendMail("jacques@spg1.com", "Event Notification", event.toString());
-		display.showEvent(event);		
+		display.showEvent(event);
 	}
 	
 	public boolean hasEvents(Date date) {
