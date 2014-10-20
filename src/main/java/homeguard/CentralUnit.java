@@ -68,14 +68,7 @@ public class CentralUnit {
         String status = tokens[1];
 
         // find sensor with id
-        Sensor sensor = null;
-        for (Iterator iterator = sensors.iterator(); iterator.hasNext(); ) {
-            Sensor s = (Sensor) iterator.next();
-            if (s.getId().equals(id)) {
-                sensor = s;
-                break;
-            }
-        }
+        Sensor sensor = getSensorById(id);
 
         //trip or reset sensor
         if (sensor != null) {
@@ -92,6 +85,18 @@ public class CentralUnit {
 
         // check if a sensor test is running and adjust status
         updateSensorTestStatus(id, status);
+    }
+
+    private Sensor getSensorById(String id) {
+        Sensor sensor = null;
+        for (Iterator iterator = sensors.iterator(); iterator.hasNext(); ) {
+            Sensor s = (Sensor) iterator.next();
+            if (s.getId().equals(id)) {
+                sensor = s;
+                break;
+            }
+        }
+        return sensor;
     }
 
     private void updateSensorTestStatus(String id, String status) {
