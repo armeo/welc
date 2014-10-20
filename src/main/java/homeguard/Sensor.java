@@ -40,4 +40,20 @@ public class Sensor {
     public boolean isTripped() {
         return tripped;
     }
+
+    public String getMessage() {
+        String message = "default";
+        if (!isTripped()) {
+            if (getType().equals(DOOR)) return getLocation() + " is closed";
+            else if (getType().equals(WINDOW)) return getLocation() + " is sealed";
+            else if (getType().equals(MOTION)) return getLocation() + " is motionless";
+            else if (getType().equals(FIRE)) return getLocation() + " temperature is normal";
+        } else {
+            if (getType().equals(DOOR)) return getLocation() + " is open";
+            else if (getType().equals(WINDOW)) return getLocation() + " is ajar";
+            else if (getType().equals(MOTION)) return "Motion detected in " + getLocation();
+            else if (getType().equals(FIRE)) return getLocation() + " is on FIRE!";
+        }
+        return message;
+    }
 }
