@@ -11,7 +11,6 @@ public class CentralUnit {
     private HomeGuardView view = new TextView();
     private AudibleAlarm audibleAlarm = new TextAudibleAlarm();
 
-    // members to help with sensor tests
     Diagnostics diagnostics = new Diagnostics();
 
     public boolean isArmed() {
@@ -58,25 +57,19 @@ public class CentralUnit {
     }
 
     public void parseRadioBroadcast(String packet) {
-        //parse the packet
-        String[] tokens = packet.split(",");
-        String id = tokens[0];
-        String status = tokens[1];
+        Packet packetSensor = new Packet(packet);
 
-        // find sensor with id
-        Sensor sensor = getSensorById(id);
+        Sensor sensor = getSensorById(packetSensor.getSensorId());
 
-        //trip or reset sensor
-        tripOrResetSensor(status, sensor);
+        if(sensor == null)
+            return;
 
-        //get the message from the sensor and display it
+        tripOrResetSensor(packetSensor.getSensorStatus(), sensor);
+
         view.showMessage(sensor.getMessage());
-
-        // sound the alarm if armed
         if (isArmed()) audibleAlarm.sound();
 
-        // check if a sensor test is running and adjust status
-        diagnostics.update(id, status);
+        diagnostics.update(packetSensor);
     }
 
     private void tripOrResetSensor(String status, Sensor sensor) {

@@ -17,10 +17,10 @@ public class Diagnostics {
         sensorTestStatus = determinateSensorTestStatus();
     }
 
-    void update(String id, String status) {
+    void update(Packet packet) {
         if (runningSensorTest) {
-            if ("TRIPPED".equals(status)) {
-                sensorTestStatusMap.put(id, SensorStatus.PASS);
+            if ("TRIPPED".equals(packet.getSensorStatus())) {
+                sensorTestStatusMap.put(packet.getSensorId(), SensorStatus.PASS);
             }
 
             //terminate test if complete
