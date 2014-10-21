@@ -53,22 +53,12 @@ public class Server {
             ls._user = config.user;
             ls._password = config.password;
             ls._listFile = config.emailListFile;
-            if (config.fromName != null) ls._fromName = config.fromName;
+            ls._fromName = config.fromName;
 
-            Vector vList = readEmailListFile(config);
-            if (ls.debugOn) System.out.println(new Date() + "> " + "Found " + vList.size() + " email ids in list");
-
-            ls.toList = new InternetAddress[vList.size()];
-            vList.copyInto(ls.toList);
-            vList = null;
+            ls.toList = readInternetAddressInEmailListFile(config, ls.debugOn);
 
             // Get a Session object
-            Properties sysProperties = System.getProperties();
-            Session session = Session.getDefaultInstance(sysProperties, null);
-            session.setDebug(ls.debugOn);
-
-            // Connect to host
-            Store store = session.getStore(Server.POP_MAIL);
+            Store store = getSessionStore(ls.debugOn);
             store.connect(ls._pop3Host, -1, ls._user, ls._password);
 
             // Open the default folder
@@ -167,6 +157,15 @@ public class Server {
         }
     }
 
+    private static Store getSessionStore(boolean debugOn) throws NoSuchProviderException {
+        Properties sysProperties = System.getProperties();
+        Session session = Session.getDefaultInstance(sysProperties, null);
+        session.setDebug(debugOn);
+
+        // Connect to host
+        return session.getStore(Server.POP_MAIL);
+    }
+
     private static void checkArgsExitIfWrong(String[] args){
         if (args.length < 6) {
             System.err.println("Usage: java Server SMTPHost POP3Host user password EmailListFile CheckPeriodFromName");
@@ -190,7 +189,7 @@ public class Server {
 
     }
 
-    private static Vector readEmailListFile(Config config) throws IOException, AddressException {
+    private static InternetAddress[] readInternetAddressInEmailListFile(Config config, boolean debugOn) throws IOException, AddressException {
         Vector vList = new Vector(10);
         BufferedReader listFile = new BufferedReader(new FileReader(config.emailListFile));
         String line = null;
@@ -198,6 +197,13 @@ public class Server {
             vList.addElement(new InternetAddress(line));
         }
         listFile.close();
-        return vList;
+
+        if (debugOn) System.out.println(new Date() + "> " + "Found " + vList.size() + " email ids in list");
+
+        InternetAddress[] toList = new InternetAddress[vList.size()];
+        vList.copyInto(toList);
+        vList = null;
+
+        return toList;
     }
 }
