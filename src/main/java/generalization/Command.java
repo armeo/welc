@@ -10,9 +10,21 @@ public abstract class Command {
     protected static final int CMD_BYTE_LENGTH = 1;
 
     protected abstract byte[] getCommandChar();
+    protected abstract int getSize();
+    protected abstract void writeBody(OutputStream outputStream) throws IOException;
 
     protected void writeField(OutputStream outputStream, String field) throws IOException {
         outputStream.write(field.getBytes());
         outputStream.write(0x00);
+    }
+
+    public void write(OutputStream outputStream) throws Exception {
+        outputStream.write(header);
+        outputStream.write(getSize());
+        outputStream.write(getCommandChar());
+
+        writeBody(outputStream);
+
+        outputStream.write(footer);
     }
 }

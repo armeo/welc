@@ -23,7 +23,7 @@ public class AddEmployeeCmd extends Command {
         return new byte[]{0x02};
     }
 
-    private int getSize() {
+    protected int getSize() {
         return header.length + SIZE_LENGTH + CMD_BYTE_LENGTH + footer.length +
                 name.getBytes().length + 1 +
                 address.getBytes().length + 1 +
@@ -32,17 +32,7 @@ public class AddEmployeeCmd extends Command {
                 yearlySalary.getBytes().length + 1;
     }
 
-    public void write(OutputStream outputStream) throws Exception {
-        outputStream.write(header);
-        outputStream.write(getSize());
-        outputStream.write(getCommandChar());
-
-        writeBody(outputStream);
-
-        outputStream.write(footer);
-    }
-
-    private void writeBody(OutputStream outputStream) throws IOException {
+    protected void writeBody(OutputStream outputStream) throws IOException {
         writeField(outputStream, name);
         writeField(outputStream, address);
         writeField(outputStream, city);

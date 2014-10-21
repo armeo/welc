@@ -17,23 +17,13 @@ public class LoginCommand extends Command {
         return new byte[]{0x01};
     }
 
-    private int getSize() {
+    protected int getSize() {
         return header.length + SIZE_LENGTH + CMD_BYTE_LENGTH + footer.length +
                 userName.getBytes().length + 1 +
                 passwd.getBytes().length + 1;
     }
 
-    public void write(OutputStream outputStream) throws Exception {
-        outputStream.write(header);
-        outputStream.write(getSize());
-        outputStream.write(getCommandChar());
-
-        writeBody(outputStream);
-
-        outputStream.write(footer);
-    }
-
-    private void writeBody(OutputStream outputStream) throws IOException {
+    protected void writeBody(OutputStream outputStream) throws IOException {
         writeField(outputStream, userName);
         writeField(outputStream, passwd);
     }
