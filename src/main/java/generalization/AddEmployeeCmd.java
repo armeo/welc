@@ -18,7 +18,7 @@ public class AddEmployeeCmd extends Command {
         this.yearlySalary = Integer.toString(yearlySalary);
     }
 
-    public static byte[] getCommandChar() {
+    public byte[] getCommandChar() {
         return new byte[]{0x02};
     }
 

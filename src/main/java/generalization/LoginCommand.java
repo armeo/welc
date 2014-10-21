@@ -12,7 +12,7 @@ public class LoginCommand extends Command {
         this.passwd = passwd;
     }
 
-    public static byte[] getCommandChar() {
+    public byte[] getCommandChar() {
         return new byte[]{0x01};
     }
 
@@ -26,8 +26,10 @@ public class LoginCommand extends Command {
         outputStream.write(header);
         outputStream.write(getSize());
         outputStream.write(getCommandChar());
+
         writeField(outputStream, userName);
         writeField(outputStream, passwd);
+
         outputStream.write(footer);
     }
 }
