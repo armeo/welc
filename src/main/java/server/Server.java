@@ -21,6 +21,11 @@ class Template {
     }
 }
 
+class Config{
+    public String smtpHost, pop3Host, user, password, emailListFile, fromName;
+
+    public int checkPeriod;
+}
 
 public class Server {
     private static final String INBOX = "INBOX", POP_MAIL = "pop3", SMTP_MAIL = "smtp";
@@ -29,25 +34,35 @@ public class Server {
     private InternetAddress[] toList = null;
 
 
-    private static void checkArgsUsage(String[] args){
+    private static void checkArgsExitIfWrong(String[] args){
         if (args.length < 6) {
             System.err.println("Usage: java Server SMTPHost POP3Host user password EmailListFile CheckPeriodFromName");
             System.exit(1);
         }
     }
+
+    private static Config buildConfigFromArgs(String[] args){
+        Config config = new Config();
+        config.smtpHost = args[0];
+        config.pop3Host = args[1];
+        config.user = args[2];
+        config.password = args[3];
+        config.emailListFile = args[4];
+        config.checkPeriod = Integer.parseInt(args[5]);
+
+        if (args.length > 6)
+            config.fromName = args[6];
+
+        return config;
+
+    }
     /**
      * main() is used to start an instance of the Server
      */
     public static void main(String args[]) throws Exception {
-        // check usage
-        checkArgsUsage(args);
+        checkArgsExitIfWrong(args);
 
-        // Assign command line arguments to meaningful variable names
-        String smtpHost = args[0], pop3Host = args[1], user = args[2], password = args[3], emailListFile = args[4], fromName = null;
-
-        int checkPeriod = Integer.parseInt(args[5]);
-
-        if (args.length > 6) fromName = args[6];
+        Config config = buildConfigFromArgs(args);
 
         // Process every "checkPeriod" minutes
         Server ls = new Server();
@@ -55,16 +70,16 @@ public class Server {
 
         while (true) {
             if (ls.debugOn) System.out.println(new Date() + "> " + "SESSION START");
-            ls._smtpHost = smtpHost;
-            ls._pop3Host = pop3Host;
-            ls._user = user;
-            ls._password = password;
-            ls._listFile = emailListFile;
-            if (fromName != null) ls._fromName = fromName;
+            ls._smtpHost = config.smtpHost;
+            ls._pop3Host = config.pop3Host;
+            ls._user = config.user;
+            ls._password = config.password;
+            ls._listFile = config.emailListFile;
+            if (config.fromName != null) ls._fromName = config.fromName;
 
             // Read in email list file into java.util.Vector
             Vector vList = new Vector(10);
-            BufferedReader listFile = new BufferedReader(new FileReader(emailListFile));
+            BufferedReader listFile = new BufferedReader(new FileReader(config.emailListFile));
             String line = null;
             while ((line = listFile.readLine()) != null) {
                 vList.addElement(new InternetAddress(line));
@@ -86,7 +101,7 @@ public class Server {
             // Connect to host
             //
             Store store = session.getStore(Server.POP_MAIL);
-            store.connect(pop3Host, -1, ls._user, ls._password);
+            store.connect(ls._pop3Host, -1, ls._user, ls._password);
 
             // Open the default folder
             Folder folder = store.getDefaultFolder();
@@ -179,8 +194,8 @@ public class Server {
                 store.close();
             }
             if (ls.debugOn)
-                System.out.println(new Date() + "> " + "SESSION END (Going to sleep for " + checkPeriod + " minutes)");
-            Thread.sleep(checkPeriod * 1000 * 60);
+                System.out.println(new Date() + "> " + "SESSION END (Going to sleep for " + config.checkPeriod + " minutes)");
+            Thread.sleep(config.checkPeriod * 1000 * 60);
         }
     }
 }
