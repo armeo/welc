@@ -1,5 +1,6 @@
 package generalization;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class LoginCommand extends Command {
@@ -27,10 +28,14 @@ public class LoginCommand extends Command {
         outputStream.write(getSize());
         outputStream.write(getCommandChar());
 
-        writeField(outputStream, userName);
-        writeField(outputStream, passwd);
+        writeBody(outputStream);
 
         outputStream.write(footer);
+    }
+
+    private void writeBody(OutputStream outputStream) throws IOException {
+        writeField(outputStream, userName);
+        writeField(outputStream, passwd);
     }
 }
 

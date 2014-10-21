@@ -1,5 +1,6 @@
 package generalization;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class AddEmployeeCmd extends Command {
@@ -35,11 +36,17 @@ public class AddEmployeeCmd extends Command {
         outputStream.write(header);
         outputStream.write(getSize());
         outputStream.write(getCommandChar());
+
+        writeBody(outputStream);
+
+        outputStream.write(footer);
+    }
+
+    private void writeBody(OutputStream outputStream) throws IOException {
         writeField(outputStream, name);
         writeField(outputStream, address);
         writeField(outputStream, city);
         writeField(outputStream, state);
         writeField(outputStream, yearlySalary);
-        outputStream.write(footer);
     }
 }
