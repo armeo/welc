@@ -4,6 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Vector;
@@ -33,29 +34,6 @@ public class Server {
     private String _smtpHost = null, _pop3Host = null, _user = null, _password = null, _listFile = null, _fromName = null;
     private InternetAddress[] toList = null;
 
-
-    private static void checkArgsExitIfWrong(String[] args){
-        if (args.length < 6) {
-            System.err.println("Usage: java Server SMTPHost POP3Host user password EmailListFile CheckPeriodFromName");
-            System.exit(1);
-        }
-    }
-
-    private static Config buildConfigFromArgs(String[] args){
-        Config config = new Config();
-        config.smtpHost = args[0];
-        config.pop3Host = args[1];
-        config.user = args[2];
-        config.password = args[3];
-        config.emailListFile = args[4];
-        config.checkPeriod = Integer.parseInt(args[5]);
-
-        if (args.length > 6)
-            config.fromName = args[6];
-
-        return config;
-
-    }
     /**
      * main() is used to start an instance of the Server
      */
@@ -77,21 +55,12 @@ public class Server {
             ls._listFile = config.emailListFile;
             if (config.fromName != null) ls._fromName = config.fromName;
 
-            // Read in email list file into java.util.Vector
-            Vector vList = new Vector(10);
-            BufferedReader listFile = new BufferedReader(new FileReader(config.emailListFile));
-            String line = null;
-            while ((line = listFile.readLine()) != null) {
-                vList.addElement(new InternetAddress(line));
-            }
-            listFile.close();
+            Vector vList = readEmailListFile(config);
             if (ls.debugOn) System.out.println(new Date() + "> " + "Found " + vList.size() + " email ids in list");
 
             ls.toList = new InternetAddress[vList.size()];
             vList.copyInto(ls.toList);
             vList = null;
-
-            // Get individual emails and broadcast them to all email ids
 
             // Get a Session object
             Properties sysProperties = System.getProperties();
@@ -99,7 +68,6 @@ public class Server {
             session.setDebug(ls.debugOn);
 
             // Connect to host
-            //
             Store store = session.getStore(Server.POP_MAIL);
             store.connect(ls._pop3Host, -1, ls._user, ls._password);
 
@@ -197,5 +165,39 @@ public class Server {
                 System.out.println(new Date() + "> " + "SESSION END (Going to sleep for " + config.checkPeriod + " minutes)");
             Thread.sleep(config.checkPeriod * 1000 * 60);
         }
+    }
+
+    private static void checkArgsExitIfWrong(String[] args){
+        if (args.length < 6) {
+            System.err.println("Usage: java Server SMTPHost POP3Host user password EmailListFile CheckPeriodFromName");
+            System.exit(1);
+        }
+    }
+
+    private static Config buildConfigFromArgs(String[] args){
+        Config config = new Config();
+        config.smtpHost = args[0];
+        config.pop3Host = args[1];
+        config.user = args[2];
+        config.password = args[3];
+        config.emailListFile = args[4];
+        config.checkPeriod = Integer.parseInt(args[5]);
+
+        if (args.length > 6)
+            config.fromName = args[6];
+
+        return config;
+
+    }
+
+    private static Vector readEmailListFile(Config config) throws IOException, AddressException {
+        Vector vList = new Vector(10);
+        BufferedReader listFile = new BufferedReader(new FileReader(config.emailListFile));
+        String line = null;
+        while ((line = listFile.readLine()) != null) {
+            vList.addElement(new InternetAddress(line));
+        }
+        listFile.close();
+        return vList;
     }
 }
