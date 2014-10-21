@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SensorTest {
 
     public static Sensor makeSensor(String id, String location, String type){
+        if(Sensor.DOOR.equals(type))
+            return new DoorSensor(id, location, type);
       return new Sensor(id, location, type);
     }
 
