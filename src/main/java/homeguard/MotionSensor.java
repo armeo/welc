@@ -6,11 +6,17 @@ public class MotionSensor extends Sensor {
         super(id, location, type);
     }
 
-    public String getType() {
-        return MOTION;
+    @Override
+    protected String nonTrippedMessage() {
+        return getLocation() + " is motionless";
     }
 
-    public String getMessage() {
-        return isTripped() ? "Motion detected in " + getLocation() : getLocation() + " is motionless";
+    @Override
+    protected String trippedMessage() {
+        return "Motion detected in " + getLocation();
+    }
+
+    public String getType() {
+        return MOTION;
     }
 }

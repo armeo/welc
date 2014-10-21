@@ -6,11 +6,17 @@ public class FireSensor extends Sensor {
         super(id, location, type);
     }
 
-    public String getType() {
-        return FIRE;
+    @Override
+    protected String nonTrippedMessage() {
+        return getLocation() + " temperature is normal";
     }
 
-    public String getMessage() {
-        return isTripped() ? getLocation() + " is on FIRE!" : getLocation() + " temperature is normal";
+    @Override
+    protected String trippedMessage() {
+        return getLocation() + " is on FIRE!";
+    }
+
+    public String getType() {
+        return FIRE;
     }
 }

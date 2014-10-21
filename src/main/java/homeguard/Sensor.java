@@ -1,6 +1,6 @@
 package homeguard;
 
-public class Sensor {
+public abstract class Sensor {
     public static final String DOOR = "door";
     public static final String MOTION = "motion";
     public static final String WINDOW = "window";
@@ -16,6 +16,9 @@ public class Sensor {
         this.location = location;
         this.type = type;
     }
+
+    protected abstract String nonTrippedMessage();
+    protected abstract String trippedMessage();
 
     public String getId() {
         return id;
@@ -42,6 +45,6 @@ public class Sensor {
     }
 
     public String getMessage() {
-        return "default";
+        return isTripped() ? trippedMessage() : nonTrippedMessage();
     }
 }

@@ -16,7 +16,7 @@ public class SensorTest {
             return new MotionSensor(id, location, type);
         else if(Sensor.FIRE.equals(type))
             return new FireSensor(id, location, type);
-      return new Sensor(id, location, type);
+      throw new IllegalArgumentException();
     }
 
     public static void assertSensorMessage(String type, String nonTrippedMessage, String trippedMessage){
@@ -37,6 +37,5 @@ public class SensorTest {
         assertSensorMessage(Sensor.WINDOW, "<X> is sealed", "<X> is ajar");
         assertSensorMessage(Sensor.MOTION, "<X> is motionless", "Motion detected in <X>");
         assertSensorMessage(Sensor.FIRE, "<X> temperature is normal", "<X> is on FIRE!");
-        assertSensorMessage("", "default", "default");
     }
 }

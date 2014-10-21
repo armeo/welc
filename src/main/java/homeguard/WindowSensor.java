@@ -6,11 +6,17 @@ public class WindowSensor extends Sensor {
         super(id, location, type);
     }
 
-    public String getType() {
-        return WINDOW;
+    @Override
+    protected String nonTrippedMessage() {
+        return getLocation() + " is sealed";
     }
 
-    public String getMessage() {
-        return isTripped() ? getLocation() + " is ajar" : getLocation() + " is sealed";
+    @Override
+    protected String trippedMessage() {
+        return getLocation() + " is ajar";
+    }
+
+    public String getType() {
+        return WINDOW;
     }
 }

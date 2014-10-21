@@ -6,11 +6,17 @@ public class DoorSensor extends Sensor {
         super(id, location, type);
     }
 
-    public String getType() {
-        return DOOR;
+    @Override
+    protected String nonTrippedMessage() {
+        return getLocation() + " is closed";
     }
 
-    public String getMessage() {
-        return isTripped() ? getLocation() + " is open" : getLocation() + " is closed";
+    @Override
+    protected String trippedMessage() {
+        return getLocation() + " is open";
+    }
+
+    public String getType() {
+        return DOOR;
     }
 }
