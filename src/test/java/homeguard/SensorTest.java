@@ -10,6 +10,8 @@ public class SensorTest {
     public static Sensor makeSensor(String id, String location, String type){
         if(Sensor.DOOR.equals(type))
             return new DoorSensor(id, location, type);
+        else if(Sensor.WINDOW.equals(type))
+            return new WindowSensor(id, location, type);
       return new Sensor(id, location, type);
     }
 
