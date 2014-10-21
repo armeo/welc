@@ -12,6 +12,8 @@ public class SensorTest {
             return new DoorSensor(id, location, type);
         else if(Sensor.WINDOW.equals(type))
             return new WindowSensor(id, location, type);
+        else if(Sensor.MOTION.equals(type))
+            return new MotionSensor(id, location, type);
       return new Sensor(id, location, type);
     }
 
