@@ -14,6 +14,8 @@ public class SensorTest {
             return new WindowSensor(id, location, type);
         else if(Sensor.MOTION.equals(type))
             return new MotionSensor(id, location, type);
+        else if(Sensor.FIRE.equals(type))
+            return new FireSensor(id, location, type);
       return new Sensor(id, location, type);
     }
 
