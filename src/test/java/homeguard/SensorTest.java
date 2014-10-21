@@ -7,13 +7,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SensorTest {
 
+    public static Sensor makeSensor(String id, String location, String type){
+      return new Sensor(id, location, type);
+    }
+
     public static void assertSensorMessage(String type, String nonTrippedMessage, String trippedMessage){
         {
-            Sensor sensor = new Sensor("1", "<X>", type);
+            Sensor sensor = makeSensor("1", "<X>", type);
             assertThat(sensor.getMessage(), is(nonTrippedMessage));
         }
         {
-            Sensor sensor = new Sensor("1", "<X>", type);
+            Sensor sensor = makeSensor("1", "<X>", type);
             sensor.trip();
             assertThat(sensor.getMessage(), is(trippedMessage));
         }
