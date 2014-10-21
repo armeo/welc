@@ -64,19 +64,21 @@ public class CentralUnit {
         if(sensor == null)
             return;
 
-        tripOrResetSensor(packetSensor.getSensorStatus(), sensor);
+        if ("TRIPPED".equals(packetSensor.getSensorStatus()))
+            sensor.trip();
+        else
+            sensor.reset();
 
-        view.showMessage(sensor.getMessage());
-        if (isArmed()) audibleAlarm.sound();
+        showMessage(sensor);
+
+        if (isArmed())
+            audibleAlarm.sound();
 
         diagnostics.update(packetSensor);
     }
 
-    private void tripOrResetSensor(String status, Sensor sensor) {
-        if (sensor != null) {
-            if ("TRIPPED".equals(status)) sensor.trip();
-            else sensor.reset();
-        }
+    private void showMessage(Sensor sensor) {
+        view.showMessage(sensor.getMessage());
     }
 
     private Sensor getSensorById(String id) {
