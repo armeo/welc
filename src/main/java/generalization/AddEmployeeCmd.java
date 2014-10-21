@@ -1,12 +1,4 @@
 package generalization;
-/*
- * Created by IntelliJ IDEA.
- * User: bbutton
- * Date: Aug 1, 2002
- * Time: 9:34:33 AM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 
 import java.io.OutputStream;
 
@@ -40,17 +32,11 @@ public class AddEmployeeCmd extends Command {
         outputStream.write(header);
         outputStream.write(getSize());
         outputStream.write(commandChar);
-        outputStream.write(name.getBytes());
-        outputStream.write(0x00);
-        outputStream.write(address.getBytes());
-        outputStream.write(0x00);
-        outputStream.write(city.getBytes());
-        outputStream.write(0x00);
-        outputStream.write(state.getBytes());
-        outputStream.write(0x00);
-        outputStream.write(yearlySalary.getBytes());
-        outputStream.write(0x00);
+        writeField(outputStream, name);
+        writeField(outputStream, address);
+        writeField(outputStream, city);
+        writeField(outputStream, state);
+        writeField(outputStream, yearlySalary);
         outputStream.write(footer);
     }
-
 }

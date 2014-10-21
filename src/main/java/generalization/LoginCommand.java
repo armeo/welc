@@ -1,12 +1,4 @@
 package generalization;
-/*
- * Created by IntelliJ IDEA.
- * User: bbutton
- * Date: Jul 31, 2002
- * Time: 11:30:29 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 
 import java.io.OutputStream;
 
@@ -32,10 +24,8 @@ public class LoginCommand extends Command {
         outputStream.write(header);
         outputStream.write(getSize());
         outputStream.write(commandChar);
-        outputStream.write(userName.getBytes());
-        outputStream.write(0x00);
-        outputStream.write(passwd.getBytes());
-        outputStream.write(0x00);
+        writeField(outputStream, userName);
+        writeField(outputStream, passwd);
         outputStream.write(footer);
     }
 }
