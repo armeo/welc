@@ -1,3 +1,5 @@
+package conditionals;
+
 public class ScopeMayhem {
 	public int foo() {
 		boolean a = true;
