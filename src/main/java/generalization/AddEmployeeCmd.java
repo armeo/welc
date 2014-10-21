@@ -10,12 +10,9 @@ package generalization;
 
 import java.io.OutputStream;
 
-public class AddEmployeeCmd {
-    private static final byte[] header = {(byte) 0xde, (byte) 0xad};
+public class AddEmployeeCmd extends Command {
     private static final byte[] commandChar = {0x02};
-    private static final byte[] footer = {(byte) 0xbe, (byte) 0xef};
-    private static final int SIZE_LENGTH = 1;
-    private static final int CMD_BYTE_LENGTH = 1;
+
     String name;
     String address;
     String city;
@@ -57,4 +54,3 @@ public class AddEmployeeCmd {
     }
 
 }
-

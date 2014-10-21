@@ -10,13 +10,10 @@ package generalization;
 
 import java.io.OutputStream;
 
-public class LoginCommand {
+public class LoginCommand extends Command {
 
-    private static final byte[] header = {(byte) 0xde, (byte) 0xad};
     private static final byte[] commandChar = {0x01};
-    private static final byte[] footer = {(byte) 0xbe, (byte) 0xef};
-    private static final int SIZE_LENGTH = 1;
-    private static final int CMD_BYTE_LENGTH = 1;
+
     private String userName;
     private String passwd;
 
