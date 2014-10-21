@@ -3,7 +3,6 @@ package generalization;
 import java.io.OutputStream;
 
 public class AddEmployeeCmd extends Command {
-    private static final byte[] commandChar = {0x02};
 
     String name;
     String address;
@@ -19,6 +18,10 @@ public class AddEmployeeCmd extends Command {
         this.yearlySalary = Integer.toString(yearlySalary);
     }
 
+    public static byte[] getCommandChar() {
+        return new byte[]{0x02};
+    }
+
     private int getSize() {
         return header.length + SIZE_LENGTH + CMD_BYTE_LENGTH + footer.length +
                 name.getBytes().length + 1 +
@@ -31,7 +34,7 @@ public class AddEmployeeCmd extends Command {
     public void write(OutputStream outputStream) throws Exception {
         outputStream.write(header);
         outputStream.write(getSize());
-        outputStream.write(commandChar);
+        outputStream.write(getCommandChar());
         writeField(outputStream, name);
         writeField(outputStream, address);
         writeField(outputStream, city);

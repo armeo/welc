@@ -4,14 +4,16 @@ import java.io.OutputStream;
 
 public class LoginCommand extends Command {
 
-    private static final byte[] commandChar = {0x01};
-
     private String userName;
     private String passwd;
 
     public LoginCommand(String userName, String passwd) {
         this.userName = userName;
         this.passwd = passwd;
+    }
+
+    public static byte[] getCommandChar() {
+        return new byte[]{0x01};
     }
 
     private int getSize() {
@@ -23,7 +25,7 @@ public class LoginCommand extends Command {
     public void write(OutputStream outputStream) throws Exception {
         outputStream.write(header);
         outputStream.write(getSize());
-        outputStream.write(commandChar);
+        outputStream.write(getCommandChar());
         writeField(outputStream, userName);
         writeField(outputStream, passwd);
         outputStream.write(footer);
