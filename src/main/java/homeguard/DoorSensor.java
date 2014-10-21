@@ -11,7 +11,6 @@ public class DoorSensor extends Sensor {
     }
 
     public String getMessage() {
-        if (!isTripped()) return getLocation() + " is closed";
-        return getLocation() + " is open";
+        return isTripped() ? getLocation() + " is open" : getLocation() + " is closed";
     }
 }

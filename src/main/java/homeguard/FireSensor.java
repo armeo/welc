@@ -11,7 +11,6 @@ public class FireSensor extends Sensor {
     }
 
     public String getMessage() {
-        if (!isTripped()) return getLocation() + " temperature is normal";
-        return getLocation() + " is on FIRE!";
+        return isTripped() ? getLocation() + " is on FIRE!" : getLocation() + " temperature is normal";
     }
 }

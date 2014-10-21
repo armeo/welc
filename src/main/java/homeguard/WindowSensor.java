@@ -11,7 +11,6 @@ public class WindowSensor extends Sensor {
     }
 
     public String getMessage() {
-        if (!isTripped()) return getLocation() + " is sealed";
-        return getLocation() + " is ajar";
+        return isTripped() ? getLocation() + " is ajar" : getLocation() + " is sealed";
     }
 }

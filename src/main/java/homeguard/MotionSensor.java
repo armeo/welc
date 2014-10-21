@@ -11,7 +11,6 @@ public class MotionSensor extends Sensor {
     }
 
     public String getMessage() {
-        if (!isTripped()) return getLocation() + " is motionless";
-        return "Motion detected in " + getLocation();
+        return isTripped() ? "Motion detected in " + getLocation() : getLocation() + " is motionless";
     }
 }
