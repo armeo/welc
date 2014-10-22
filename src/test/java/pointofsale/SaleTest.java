@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 class FakeDisplay implements Display {
     String lastShownLine;
@@ -45,7 +44,7 @@ public class SaleTest {
     }
 
     @Test
-    public void canSellPreservedDuckEggs() throws ItemNotFoundException {
+    public void canSellPreservedDuckEggs() {
         FakeListener listener = new FakeListener();
         sale = new Sale(listener);
         sale.addBarcode("1");
@@ -54,20 +53,20 @@ public class SaleTest {
     }
 
     @Test
-    public void canSellMilk() throws ItemNotFoundException {
+    public void canSellMilk() {
         sale.addBarcode("3");
         assertEquals("Milk $70.00", display.lastShownLine);
     }
 
     @Test
-    public void canSellMilkWithCoupon() throws ItemNotFoundException {
+    public void canSellMilkWithCoupon() {
         sale.addBarcode("3");
         sale.addBarcode("4");   // Coupon for Milk
         assertEquals("Coupon for Milk ($0.10)", display.lastShownLine);
     }
 
     @Test
-    public void canSubtotalASale() throws ItemNotFoundException {
+    public void canSubtotalASale() {
         sale.addBarcode("1");
         sale.addBarcode("3");
         sale.subtotal();
@@ -75,15 +74,15 @@ public class SaleTest {
     }
 
     @Test
-    public void canTotalASale() throws ItemNotFoundException {
+    public void canTotalASale() {
         sale.addBarcode("3");
         sale.total();
         assertEquals("Total $70.00", display.lastShownLine);
     }
 
-    @Test(expected = ItemNotFoundException.class)
-    public void shouldThrowsExceptionWhenItemNotFound() throws ItemNotFoundException {
+    @Test
+    public void shouldShowItemNotFoundOnUnknowItem() {
         sale.addBarcode("30");
-        fail("expected item not found exception");
+        assertEquals("Item not found $0.00", display.lastShownLine);
     }
 }
