@@ -17,8 +17,8 @@ public class Sale {
         Item item = inventory.itemForBarcode(barcode);
         if(item == null)
             item = new Item("Item not found", new Money(0));
-        items.add(item);
 
+        items.add(item);
         listener.itemAdded(item);
     }
 
