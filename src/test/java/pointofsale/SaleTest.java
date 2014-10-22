@@ -81,13 +81,13 @@ public class SaleTest {
     }
 
     @Test
-    public void shouldShowItemNotFoundOnUnknowItem() {
+    public void shouldShowItemNotFoundOnUnknowsItem() {
         sale.addBarcode("30");
         assertEquals("Item not found $0.00", display.lastShownLine);
     }
 
     @Test
-    public void shouldZeroWhenTotalWithNotFoundOnUnknowItem() {
+    public void shouldZeroWhenTotalWithNotFoundOnUnknowsItem() {
         sale.addBarcode("30");
         sale.addBarcode("40");
         sale.total();
@@ -95,10 +95,21 @@ public class SaleTest {
     }
 
     @Test
-    public void shouldNotZeroWhenTotalWithNotFoundOnUnknowItem() {
+    public void shouldNotZeroWhenTotalWithNotFoundOnUnknownsItem() {
         sale.addBarcode("3");
         sale.addBarcode("40");
         sale.total();
         assertEquals("Total $70.00", display.lastShownLine);
+    }
+
+    @Test
+    public void shouldTotalDiscountWhenBuyFiveItem(){
+        sale.addBarcode("3");
+        sale.addBarcode("3");
+        sale.addBarcode("3");
+        sale.addBarcode("3");
+        sale.addBarcode("3");
+        sale.total();
+        assertEquals("Total $332.50", display.lastShownLine);
     }
 }

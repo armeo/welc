@@ -33,8 +33,10 @@ public class Sale {
         for (Item item : items) {
             sum = sum.add(item.getTaxedPrice(items));
         }
+
+        if(items.size() >= 5)
+            sum = new Money((int) (sum.getCents() - (sum.getCents() * 0.05)));
+
         listener.totalled(sum);
     }
 }
-
-
