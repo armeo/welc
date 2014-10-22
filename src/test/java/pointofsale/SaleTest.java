@@ -81,12 +81,9 @@ public class SaleTest {
         assertEquals("Total $70.00", display.lastShownLine);
     }
 
-    @Test
-    public void shouldThrowsExceptionWhenItemNotFound() {
-        try {
-            sale.addBarcode("30");
-            fail("expected item not found exception");
-        }catch (ItemNotFoundException e){
-        }
+    @Test(expected = ItemNotFoundException.class)
+    public void shouldThrowsExceptionWhenItemNotFound() throws ItemNotFoundException {
+        sale.addBarcode("30");
+        fail("expected item not found exception");
     }
 }
