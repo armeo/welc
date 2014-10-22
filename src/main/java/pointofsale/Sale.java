@@ -15,8 +15,6 @@ public class Sale {
 
     public void addBarcode(String barcode) {
         Item item = inventory.itemForBarcode(barcode);
-        if(item == null)
-            item = new Item("Item not found", new Money(0));
 
         items.add(item);
         listener.itemAdded(item);
