@@ -3,29 +3,29 @@ package pointofsale;
 import java.text.NumberFormat;
 
 public class Money {
-	private int valueInCents = 0;
-	
-	public Money(int valueInCents) {
-		this.valueInCents = valueInCents;
-	}
+    private int valueInCents = 0;
 
-	public Money() {
-	}
+    public Money(int valueInCents) {
+        this.valueInCents = valueInCents;
+    }
 
-	public String asText() {
-		return NumberFormat.getCurrencyInstance().format(valueInCents / 100.0);
-	}
+    public Money() {
+    }
 
-	public Money add(Money money) {
-		return new Money(money.valueInCents + valueInCents);
-	}
+    public String asText() {
+        return NumberFormat.getCurrencyInstance().format(valueInCents / 100.0);
+    }
 
-	public int getCents() {
-		return valueInCents;
-	}
+    public Money add(Money money) {
+        return new Money(money.valueInCents + valueInCents);
+    }
 
-	public Money negate() {
-		return new Money(-valueInCents);
-	}
+    public int getCents() {
+        return valueInCents;
+    }
+
+    public Money negate() {
+        return new Money(-valueInCents);
+    }
 
 }
