@@ -16,7 +16,7 @@ public class Inventory {
     public Item itemForBarcode(String barcode) {
         Item item = items.get(barcode);
         if(item == null)
-            item = new Item("Item not found", new Money(0));
+            item = new UnfoundedItem();
 
         return item;
     }
