@@ -13,14 +13,6 @@ public class Inventory {
         items.put("4", new Coupon(milk, new Money(10)));
     }
 
-    public Item itemForBarcode(String barcode) {
-        Item item = items.get(barcode);
-        if(item == null)
-            item = new UnfoundedItem();
-
-        return item;
-    }
-
     public void item(String barcode, Told<Item> told) {
         Item item = items.get(barcode);
         if(item != null)
