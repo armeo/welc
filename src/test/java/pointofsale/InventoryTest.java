@@ -7,10 +7,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InventoryTest {
 
+    Item toldItem;
+
     @Test
-    public void shouldReturnItemNotFoundDescriptionWhenBarcodeNotFound() {
+    public void itemIsTold(){
         Inventory inventory = new Inventory();
 
-        assertThat(inventory.itemForBarcode("11").getName(), is("Item not found"));
+        inventory.item("3", new Told<Item>(){
+           public void tell(Item item){
+               toldItem = item;
+           }
+        });
+
+        assertThat(toldItem.getName(), is("Milk"));
     }
 }

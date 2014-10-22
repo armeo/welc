@@ -81,12 +81,6 @@ public class SaleTest {
     }
 
     @Test
-    public void shouldShowItemNotFoundOnUnknowsItem() {
-        sale.addBarcode("30");
-        assertEquals("Item not found $0.00", display.lastShownLine);
-    }
-
-    @Test
     public void shouldZeroWhenTotalWithNotFoundOnUnknowsItem() {
         sale.addBarcode("30");
         sale.addBarcode("40");

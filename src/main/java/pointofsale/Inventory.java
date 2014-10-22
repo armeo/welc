@@ -21,4 +21,9 @@ public class Inventory {
         return item;
     }
 
+    public void item(String barcode, Told<Item> told) {
+        Item item = items.get(barcode);
+        if(item != null)
+            told.tell(item);
+    }
 }
